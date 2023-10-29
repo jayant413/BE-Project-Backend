@@ -27,14 +27,15 @@ app.get("/", async function (req, res) {
     let email_id = "jayant@gmail.com";
     let aadhaar_no = "255081715441";
 
-    const admin = await new Administrator({ name, mobile_number, email_id, aadhaar_no }).save();
+    // const admin = await new Administrator({ name, mobile_number, email_id, aadhaar_no }).save();
 
+    res.send("<h1> Welcome to ecopass boarding System Backend</h1>")
 
-    res.status(200).json({
-        message: "Successfully registered admin",
-        admin: admin,
-        result: true
-    })
+    // res.status(200).json({
+    //     message: "Successfully registered admin",
+    //     admin: admin,
+    //     result: true
+    // })
 })
 
 

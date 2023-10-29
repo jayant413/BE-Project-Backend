@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PassengerSchema = new mongoose.Schema({
+const ConductorSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -20,18 +20,11 @@ const PassengerSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    created_at: {
-        type: Date,
-        required: true,
-        default: Date.now()
-    },
-    updated_at: {
-        type: Date,
-    },
-
-})
+},
+    { timestamps: true }
+)
 
 
-const Contractor = mongoose.model("Passenger", PassengerSchema);
+const Conductor = mongoose.model("Conductor", ConductorSchema);
 
-module.exports = Contractor;
+module.exports = Conductor;

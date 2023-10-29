@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PassengerSchema = new mongoose.Schema({
-    rfid_no: {
+    rfid_no: {   // passengerId
         type: String,
         required: true,
         unique: true
@@ -32,19 +32,17 @@ const PassengerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    // created_at: {
-    //     type: Date,
-    //     required: true,
-    //     default: Date.now()
-    // },
-    // updated_at: {
-    //     type: Date,
-    // },
+    passengerLogs: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'PassengerLog',
+        },
+    ],
 },
     { timestamps: true }
 )
 
 
-const Contractor = mongoose.model("Passenger", PassengerSchema);
+const Passenger = mongoose.model("Passenger", PassengerSchema);
 
-module.exports = Contractor;
+module.exports = Passenger;
