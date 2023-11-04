@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Bus = require('./bus');
+const Bus = require('./bus-model');
 
 const segmentSchema = new mongoose.Schema({
     fromStop: {

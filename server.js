@@ -3,7 +3,7 @@ const cors = require("cors")
 const connectDB = require("./config/db")
 const cookieParser = require("cookie-parser")
 const dotenv = require("dotenv")
-const Administrator = require("./models/administor")
+const apiRouter = require("./routes")
 
 
 dotenv.config();
@@ -21,22 +21,7 @@ app.use(cors({
     credentials: true
 }))
 
-app.get("/", async function (req, res) {
-    let name = "Jayant";
-    let mobile_number = "8459299053";
-    let email_id = "jayant@gmail.com";
-    let aadhaar_no = "255081715441";
-
-    // const admin = await new Administrator({ name, mobile_number, email_id, aadhaar_no }).save();
-
-    res.send("<h1> Welcome to ecopass boarding System Backend</h1>")
-
-    // res.status(200).json({
-    //     message: "Successfully registered admin",
-    //     admin: admin,
-    //     result: true
-    // })
-})
+app.use("/api", apiRouter)
 
 
 

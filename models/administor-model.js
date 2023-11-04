@@ -15,10 +15,19 @@ const administratorSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    city: {
+        type: String,
+        required: true,
+        unique: false
+    },
     aadhaar_no: {
         type: String,
         required: true,
         unique: true
+    },
+    password: {
+        type: String,
+        required: true,
     },
 }
     , { timestamps: true }
