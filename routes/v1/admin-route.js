@@ -1,11 +1,12 @@
 const express = require("express");
 const { registerAdmin } = require("../../controllers/admin-controller");
+const { checkRegisterAdminInfo } = require("../../middlewares/adminMiddleware");
 
 const adminRouter = express.Router();
 
 
 adminRouter.get("/:[id]",)
-adminRouter.post("/register", registerAdmin)
+adminRouter.post("/register", checkRegisterAdminInfo, registerAdmin)
 adminRouter.post("/login",)
 
 
