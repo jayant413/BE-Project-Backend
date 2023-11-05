@@ -1,3 +1,4 @@
 PORT = 8080
 DEV_MODE = development
 MONGODB_URL = mongodb+srv://jayantss:jayantss@cluster.hutm20z.mongodb.net/ecopass
+JWT_SECRET = PROJECTECOPASS2023
