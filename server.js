@@ -25,6 +25,9 @@ app.use("/api", apiRouter)
 
 
 
+app.get('/', function (req, res) {
+    res.send("<h1> Welcome to ecopass boarding System</h1>")
+})
 app.get('*', function (req, res) {
     res.send("<h1> Welcome to ecopass boarding System</h1>")
 })
