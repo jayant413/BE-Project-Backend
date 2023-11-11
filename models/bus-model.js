@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const BusRoute = require('./bus-route-model');
 
 const busSchema = new mongoose.Schema({
     busNumber: {
@@ -17,7 +18,8 @@ const busSchema = new mongoose.Schema({
     conductor: {
         type: String,
         required: false,
-    }
+    },
+    busRoute: [BusRoute.schema]
 },
     { timestamps: true }
 );

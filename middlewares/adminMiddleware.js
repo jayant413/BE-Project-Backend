@@ -15,7 +15,7 @@ const checkRegisterAdminInfo = (req, res, next) => {
         next();
 
     } catch (error) {
-        return errorResponse(res, 500, "Error while admin registration middleware", error);
+        return errorResponse(res, 500, "Error in admin registration middleware", error);
     }
 }
 
@@ -28,7 +28,7 @@ const checkLoginAdminInfo = (req, res, next) => {
 
         next();
     } catch (error) {
-        return errorResponse(res, 500, "Error while admin login middleware", error);
+        return errorResponse(res, 500, "Error in admin login middleware", error);
     }
 }
 

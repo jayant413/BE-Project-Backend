@@ -24,6 +24,10 @@ const administratorSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    organization: [{
+        type: mongoose.Schema.Types.ObjectId,
+        required: false
+    }]
 }
     , { timestamps: true }
 )

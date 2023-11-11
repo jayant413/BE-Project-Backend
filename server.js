@@ -4,22 +4,31 @@ const connectDB = require("./config/db")
 const cookieParser = require("cookie-parser")
 const dotenv = require("dotenv")
 const apiRouter = require("./routes")
+const bodyParser = require("body-parser")
+const path = require("path")
+const session = require("express-session")
 
 
 dotenv.config();
 connectDB()
 
 const app = express()
+const secretEnv = process.env.SECRET_COOKIE
+
 app.use(express.json())
 app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(cors({
-    origin:
-        // "http://localhost:3000", 
-        true,
+    credentials: true,
+    origin: "http://localhost:3000",
+    // true,
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
 }))
+
+
 
 app.use("/api", apiRouter)
 

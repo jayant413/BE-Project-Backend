@@ -50,11 +50,22 @@ const loginAdmin = async (req, res) => {
 
         const token = await JWT.sign({ _id: admin._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-        return successResponse(res, 200, "Logged in successfully", { token: token })
+        res.cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000, path: "/", httpOnly: true })
+
+        return successResponse(res, 200, "Logged in successfully")
 
     } catch (error) {
         return errorResponse(res, 500, "Error while admin login", error)
     }
 }
 
-module.exports = { registerAdmin, loginAdmin };
+const logoutAdmin = (req, res) => {
+    try {
+        res.clearCookie("token");
+        return successResponse(res, 200, "Logged out successfully")
+    } catch (error) {
+        return errorResponse(res, 500, "Error while admin logout", error)
+    }
+}
+
+module.exports = { registerAdmin, loginAdmin, logoutAdmin };
