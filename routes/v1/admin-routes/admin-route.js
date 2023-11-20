@@ -5,13 +5,12 @@ const { checkRegisterAdminInfo, checkLoginAdminInfo, checkRegisterPassengerInfo 
 const { createOrganization, getOrganizations } = require("../../../controllers/organization-controllers");
 const authMiddleware = require("../../../middlewares/auth-middleware");
 
-const managePassengerRouter = require('./register-passenger');
-const { registerPassenger } = require("../../../controllers/admin/ad-passenger-controller");
+const { registerPassenger, getAllOrganizationPassengers } = require("../../../controllers/admin/ad-passenger-controller");
 
 const adminRouter = express.Router();
 
 
-adminRouter.get("/:id",)
+// adminRouter.get("/:id",)
 
 /* Admin */
 adminRouter.post("/register", checkRegisterAdminInfo, registerAdmin)
@@ -23,7 +22,8 @@ adminRouter.post("/create-organization", authMiddleware, createOrganization)
 adminRouter.get("/organizations", authMiddleware, getOrganizations)
 
 /* Manage Passengers */
-adminRouter.use("/register-passenger", authMiddleware, checkRegisterPassengerInfo, registerPassenger)
+adminRouter.post("/register-passenger/:organizationId", authMiddleware, checkRegisterPassengerInfo, registerPassenger)
+adminRouter.get("/get-oranization-all-passenger-details/:organizationId", authMiddleware, getAllOrganizationPassengers)
 
 
 

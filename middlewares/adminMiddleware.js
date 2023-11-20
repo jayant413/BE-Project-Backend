@@ -34,7 +34,7 @@ const checkLoginAdminInfo = (req, res, next) => {
 
 const checkRegisterPassengerInfo = (req, res, next) => {
     try {
-        const { rfid_no, name, mobile_number, email_id, aadhaar_no, age, balance, organizationId } = req.body;
+        const { rfid_no, name, mobile_number, email_id, aadhaar_no, age, balance } = req.body;
 
         if (!rfid_no) {
             return errorResponse(res, 500, "Error while passenger registration. 'rfid_no' is required.");
@@ -63,9 +63,7 @@ const checkRegisterPassengerInfo = (req, res, next) => {
         if (!balance) {
             return errorResponse(res, 500, "Error while passenger registration. 'balance' is required.");
         }
-        if (!organizationId) {
-            return errorResponse(res, 500, "Error while passenger registration. 'organizationId' is required.");
-        }
+
 
         next();
     } catch (error) {

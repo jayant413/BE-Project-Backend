@@ -48,7 +48,7 @@ const loginAdmin = async (req, res) => {
 
         if (!match) return errorResponse(res, 401, "Incorrect Password");
 
-        const token = await JWT.sign({ _id: admin._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+        const token = await JWT.sign({ _id: admin._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         res.cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000, path: "/", httpOnly: true })
 
