@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const ConductorSchema = new mongoose.Schema({
+    id_card_no: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
         required: true,

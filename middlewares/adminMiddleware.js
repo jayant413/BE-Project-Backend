@@ -32,5 +32,47 @@ const checkLoginAdminInfo = (req, res, next) => {
     }
 }
 
+const checkRegisterPassengerInfo = (req, res, next) => {
+    try {
+        const { rfid_no, name, mobile_number, email_id, aadhaar_no, age, balance, organizationId } = req.body;
 
-module.exports = { checkRegisterAdminInfo, checkLoginAdminInfo }
+        if (!rfid_no) {
+            return errorResponse(res, 500, "Error while passenger registration. 'rfid_no' is required.");
+        }
+
+        if (!name) {
+            return errorResponse(res, 500, "Error while passenger registration. 'name' is required.");
+        }
+
+        if (!mobile_number) {
+            return errorResponse(res, 500, "Error while passenger registration. 'mobile_number' is required.");
+        }
+
+        if (!email_id) {
+            return errorResponse(res, 500, "Error while passenger registration. 'email_id' is required.");
+        }
+
+        if (!aadhaar_no) {
+            return errorResponse(res, 500, "Error while passenger registration. 'aadhaar_no' is required.");
+        }
+
+        if (!age) {
+            return errorResponse(res, 500, "Error while passenger registration. 'age' is required.");
+        }
+
+        if (!balance) {
+            return errorResponse(res, 500, "Error while passenger registration. 'balance' is required.");
+        }
+        if (!organizationId) {
+            return errorResponse(res, 500, "Error while passenger registration. 'organizationId' is required.");
+        }
+
+        next();
+    } catch (error) {
+        return errorResponse(res, 500, "Error in passenger registration middleware");
+
+    }
+}
+
+
+module.exports = { checkRegisterAdminInfo, checkLoginAdminInfo, checkRegisterPassengerInfo }

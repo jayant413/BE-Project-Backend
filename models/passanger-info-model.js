@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const PassengerSchema = new mongoose.Schema({
-    rfid_no: {   // passengerId
+    rfid_no: {
         type: String,
         required: true,
         unique: true
@@ -32,12 +32,12 @@ const PassengerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    passengerLogs: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'PassengerLog',
-        },
-    ],
+    // passengerLogs: [
+    //     {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'PassengerLog',
+    //     },
+    // ],
 },
     { timestamps: true }
 )

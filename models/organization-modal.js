@@ -21,6 +21,12 @@ const organizationSchema = new mongoose.Schema({
     },
     otherAdmins: [adminSchema],
     pendingAdmins: [adminSchema],
+    passengers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Passenger',
+        },
+    ],
 });
 const Organization = mongoose.model('Organization', organizationSchema);
 

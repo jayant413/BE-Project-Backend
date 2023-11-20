@@ -1,5 +1,5 @@
 const express = require("express");
-const adminRouter = require("./admin-route");
+const adminRouter = require("./admin-routes/admin-route");
 const passengerRouter = require("./passenger-route");
 
 const v1Router = express.Router();

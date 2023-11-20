@@ -19,7 +19,10 @@ const busSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    busRoute: [BusRoute.schema]
+    busRoute: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'BusRoute',
+    },
 },
     { timestamps: true }
 );

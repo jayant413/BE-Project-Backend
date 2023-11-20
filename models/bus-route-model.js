@@ -33,7 +33,12 @@ const busRouteSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    bussesOnRoute: [Bus],
+    bussesOnRoute: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Bus',
+        }
+    ],
     segments: [segmentSchema],
 },
     { timestamps: true }

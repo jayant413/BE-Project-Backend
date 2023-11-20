@@ -26,6 +26,9 @@ const createOrganization = async (req, res) => {
         const { name } = req.body;
         const cookies = req.cookies;
 
+        if (!name) return errorResponse(res, 401, "Organization name required", error)
+
+
         const decodedToken = JWT.verify(cookies.token, process.env.JWT_SECRET);
         const admin = await Administrator.findById(decodedToken._id);
 
