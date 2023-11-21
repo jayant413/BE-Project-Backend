@@ -20,13 +20,21 @@ app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "public")));
 
+const allowedOrigins = ['http://localhost:3000', 'https://ecopass-admin.vercel.app'];
+
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:3000",
-    // true,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PUT", "DELETE"],
-}))
+}));
+
 
 
 

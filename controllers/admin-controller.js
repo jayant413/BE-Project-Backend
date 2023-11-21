@@ -52,7 +52,7 @@ const loginAdmin = async (req, res) => {
 
         res.cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000, path: "/", httpOnly: true })
 
-        return successResponse(res, 200, "Logged in successfully")
+        return successResponse(res, 200, "Logged in successfully", { token: token })
 
     } catch (error) {
         return errorResponse(res, 500, "Error while admin login", error)
