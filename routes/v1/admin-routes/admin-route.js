@@ -6,6 +6,8 @@ const { createOrganization, getOrganizations } = require("../../../controllers/o
 const authMiddleware = require("../../../middlewares/auth-middleware");
 
 const { registerPassenger, getAllOrganizationPassengers } = require("../../../controllers/admin/ad-passenger-controller");
+const { registerConductor, getAllOrganizationConductors } = require("../../../controllers/admin/ad-conductor-controller");
+const { registerBus } = require("../../../controllers/admin/ad-bus-controller");
 
 const adminRouter = express.Router();
 
@@ -24,6 +26,13 @@ adminRouter.get("/organizations", authMiddleware, getOrganizations)
 /* Manage Passengers */
 adminRouter.post("/register-passenger/:organizationId", authMiddleware, checkRegisterPassengerInfo, registerPassenger)
 adminRouter.get("/get-oranization-all-passenger-details/:organizationId", authMiddleware, getAllOrganizationPassengers)
+
+/* Manage Conductors */
+adminRouter.post("/register-conductor/:organizationId", authMiddleware, registerConductor)
+adminRouter.get("/get-oranization-all-conductor-details/:organizationId", authMiddleware, getAllOrganizationConductors)
+
+/* Manage Buses */
+adminRouter.post("/register-bus/register-bus/:organizationId", authMiddleware, registerBus)
 
 
 

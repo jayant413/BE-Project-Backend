@@ -107,5 +107,7 @@ const getAllOrganizationPassengers = async (req, res) => {
     }
 }
 
-module.exports = { registerPassenger, getAllOrganizationPassengers }
+module.exports = { registerPassenger, getAllOrganizationPassengers };
+
+
 

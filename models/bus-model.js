@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const BusRoute = require('./bus-route-model');
 
 const busSchema = new mongoose.Schema({
     busNumber: {
@@ -14,10 +13,6 @@ const busSchema = new mongoose.Schema({
     routeName: {
         type: String,
         required: true,
-    },
-    conductor: {
-        type: String,
-        required: false,
     },
     busRoute: {
         type: mongoose.Schema.Types.ObjectId,

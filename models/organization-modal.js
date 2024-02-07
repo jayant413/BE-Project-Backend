@@ -27,6 +27,12 @@ const organizationSchema = new mongoose.Schema({
             ref: 'Passenger',
         },
     ],
+    conductor: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Conductor',
+        }
+    ]
 });
 const Organization = mongoose.model('Organization', organizationSchema);
 
