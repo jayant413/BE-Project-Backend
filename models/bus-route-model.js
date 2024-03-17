@@ -17,11 +17,11 @@ const segmentSchema = new mongoose.Schema({
 });
 
 const busRouteSchema = new mongoose.Schema({
-    routeNumber: {
+    route_number: {
         type: String,
         required: true,
     },
-    routeName: {
+    route_name: {
         type: String,
         required: true,
     },
@@ -32,6 +32,13 @@ const busRouteSchema = new mongoose.Schema({
     destination: {
         type: String,
         required: true,
+    },
+    number_of_stops: {
+        type: String,
+        required: true
+    },
+    all_stops: {
+        type: Array,
     },
     bussesOnRoute: [
         {
