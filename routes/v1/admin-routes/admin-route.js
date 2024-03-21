@@ -6,9 +6,10 @@ const { createOrganization, getOrganizations } = require("../../../controllers/o
 const authMiddleware = require("../../../middlewares/auth-middleware");
 
 const { registerPassenger, getAllOrganizationPassengers } = require("../../../controllers/admin/ad-passenger-controller");
-const { registerConductor, getAllOrganizationConductors } = require("../../../controllers/admin/ad-conductor-controller");
-const { registerBus } = require("../../../controllers/admin/ad-bus-controller");
+const { registerConductor, GET_OrganizationConductors } = require("../../../controllers/admin/ad-conductor-controller");
+const { POST_RegisterBus, GET_OrganizationBuses } = require("../../../controllers/admin/ad-bus-controller");
 const { POST_RegisterBusRoute, GET_BusRoutes, DELETE_BusRoute, GET_RouteDetails, POST_RegisterSegmentTickets } = require("../../../controllers/admin/ad-bus-route-controller");
+const { checkRegisterBusInfo } = require("../../../middlewares/admin-dashboard/bus-middleware");
 
 const adminRouter = express.Router();
 
@@ -30,17 +31,18 @@ adminRouter.get("/get-oranization-all-passenger-details/:organizationId", authMi
 
 /* Manage Conductors */
 adminRouter.post("/register-conductor/:organizationId", authMiddleware, registerConductor)
-adminRouter.get("/get-oranization-all-conductor-details/:organizationId", authMiddleware, getAllOrganizationConductors)
+adminRouter.get("/get-oranization-all-conductor-details/:organizationId", authMiddleware, GET_OrganizationConductors)
 
 /* Manage Buses */
-adminRouter.post("/register-bus/:organizationId", authMiddleware, registerBus)
+adminRouter.post("/register-bus/:organizationId", authMiddleware, checkRegisterBusInfo, POST_RegisterBus)
+adminRouter.get("/get-organization-buses/:organizationId", authMiddleware, GET_OrganizationBuses)
 
 /* Manage Bus Routes */
 adminRouter.get("/get-bus-routes/:organizationId", authMiddleware, GET_BusRoutes)
 adminRouter.get("/get-bus-route-details/:routeId", authMiddleware, GET_RouteDetails)
 adminRouter.put("/delete-bus-route/:organizationId/:routeId", authMiddleware, DELETE_BusRoute)
 adminRouter.post("/register-bus-route/:organizationId", authMiddleware, POST_RegisterBusRoute)
-adminRouter.post("/register-segment-tickets/:organizationId", authMiddleware, POST_RegisterSegmentTickets)
+adminRouter.post("/register-segment-tickets/:organizationId/:routeId", authMiddleware, POST_RegisterSegmentTickets)
 
 
 

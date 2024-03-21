@@ -73,4 +73,5 @@ const checkRegisterPassengerInfo = (req, res, next) => {
 }
 
 
+
 module.exports = { checkRegisterAdminInfo, checkLoginAdminInfo, checkRegisterPassengerInfo }

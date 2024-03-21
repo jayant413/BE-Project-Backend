@@ -2,17 +2,13 @@ const mongoose = require('mongoose');
 const Bus = require('./bus-model');
 
 const segmentSchema = new mongoose.Schema({
-    fromStop: {
+    fromto: {
         type: String,
-        required: true,
-    },
-    toStop: {
-        type: String,
-        required: true,
+        // required: true,
     },
     ticketPrice: {
         type: Number,
-        required: true,
+        // required: true,
     },
 });
 
@@ -46,7 +42,8 @@ const busRouteSchema = new mongoose.Schema({
             ref: 'Bus',
         }
     ],
-    segments: [segmentSchema],
+    source_to_destination: [segmentSchema],
+    destination_to_source: [segmentSchema]
 },
     { timestamps: true }
 );

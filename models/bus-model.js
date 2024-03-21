@@ -14,7 +14,15 @@ const busSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    busRoute: {
+    conductorName: {
+        type: String,
+        required: true,
+    },
+    busRouteID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'BusRoute',
+    },
+    conductorID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'BusRoute',
     },

@@ -105,14 +105,23 @@ const GET_RouteDetails = async (req, res) => {
 
 const POST_RegisterSegmentTickets = async (req, res) => {
     try {
-        const { segments } = req.body;
-        console.log(segments);
-        console.log(req.body)
+        const { source_to_destination, destination_to_source } = req.body;
+        const { routeId } = req.params;
 
-        return successResponse(res, 200, "Segments registered successfully", segments);
+        const route = await BusRoute.findById(routeId);
+
+        if (!route) {
+            return errorResponse(res, 404, "Bus Route not found");
+        };
+
+        route.source_to_destination = source_to_destination;
+        route.destination_to_source = destination_to_source;
+        const UpdatedRoute = await route.save();
+
+        return successResponse(res, 200, "Segments registered successfully", UpdatedRoute);
     } catch (error) {
         console.log(error);
-        return errorResponse(res, 500, "Error while accessing bus route details", error);
+        return errorResponse(res, 500, "Error while updating ticket segments", error);
     }
 };
 

@@ -94,7 +94,7 @@ const registerConductor = async (req, res) => {
     }
 }
 
-const getAllOrganizationConductors = async (req, res) => {
+const GET_OrganizationConductors = async (req, res) => {
     try {
         const { organizationId } = req.params;
         const organization = await Organization.findById(organizationId);
@@ -116,4 +116,4 @@ const getAllOrganizationConductors = async (req, res) => {
 
 
 
-module.exports = { registerConductor, getAllOrganizationConductors };
+module.exports = { registerConductor, GET_OrganizationConductors };
