@@ -11,22 +11,28 @@ const POST_RegisterBus = async (req, res) => {
         const { organizationId } = req.params;
 
         const organization = await Organization.findById(organizationId);
+        const route = await BusRoute.findOne({ route_number: route_number });
+        const conductor = await Conductor.findOne({ name: conductor_name });
 
-        const RouteId = await BusRoute.find({ route_number: route_number });
-        const ConductorId = await Conductor.find({ name: conductor_name });
+
+        if (!organization) return errorResponse(res, 404, "Organization not found");
+        if (!route) return errorResponse(res, 404, "Route details not found");
+        if (!conductor) return errorResponse(res, 404, "Conductor details not found");
 
         const RegisteredBus = await new Bus({
             busNumber: bus_number,
             routeName: route_name,
             routeNumber: route_number,
             conductorName: conductor_name,
-            busRouteID: RouteId[0]._id,
-            conductorID: ConductorId[0]._id
+            busRouteID: route._id,
+            conductorID: conductor._id
         }).save();
 
+        route.bussesOnRoute.push(RegisteredBus._id);
+        conductor.busId = RegisteredBus._id;
         organization.buses.push(RegisteredBus._id);
 
-        await organization.save();
+        await Promise.all([organization.save(), route.save(), conductor.save()]);
 
         return successResponse(res, 200, "Bus details registered sucessfully", { RegisteredBus: RegisteredBus })
     } catch (error) {

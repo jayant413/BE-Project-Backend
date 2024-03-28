@@ -9,21 +9,27 @@ const ConductorSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    password: {
+        type: String,
+        required: true
+    },
     mobile_number: {
         type: String,
         required: true,
-        unique: true
     },
     email_id: {
         type: String,
         required: true,
-        unique: true
     },
     aadhaar_no: {
         type: String,
         required: true,
         unique: true
     },
+    busId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Bus'
+    }
 },
     { timestamps: true }
 )

@@ -2,10 +2,11 @@ const { errorResponse, successResponse } = require("../../helper/response-format
 const JWT = require("jsonwebtoken");
 const Organization = require("../../models/organization-modal");
 const Conductor = require("../../models/conductor-info-model");
+const { hashPassword } = require("../../helper/password-helper");
 
 
 
-const registerConductor = async (req, res) => {
+const POST_RegisterConductor = async (req, res) => {
     try {
         const { id_card_no,
             name,
@@ -17,77 +18,38 @@ const registerConductor = async (req, res) => {
         const organization = await Organization.findById(organizationId);
         if (!organization) return errorResponse(res, 404, "Organization not found", error);
 
-
-
-        const conductorExistid = await Conductor.findOne({ id_card_no: id_card_no }).exec();
         const conductorExistAadhaar = await Conductor.findOne({ aadhaar_no: aadhaar_no }).exec();
-        const conductorExistMobile = await Conductor.findOne({ mobile_number: mobile_number }).exec();
-        const conductorExistEmail = await Conductor.findOne({ email_id: email_id }).exec();
 
         if (conductorExistAadhaar) {
             const isConductorInOrganization = organization.conductor.includes(conductorExistAadhaar._id);
-            if (isConductorInOrganization) return errorResponse(res, 409, "Conductor aahaar number already exists in the organization");
 
-            organization.conductor.push(conductorExistAadhaar._id);
-            const savedOrganization = await organization.save();
+            if (isConductorInOrganization) return errorResponse(res, 409, "Conductor already exists in organization");
+            else {
+                organization.conductor.push(conductorExistAadhaar._id);
+                await organization.save();
 
-            if (savedOrganization) return successResponse(res, 200, "Conductor registered to organization successfully", savedOrganization);
-            else return errorResponse(res, 500, "Error while existed conductor registration")
-        }
-        else if (conductorExistid) {
-            const isConductorInOrganization = organization.conductor.includes(conductorExistid._id);
-            if (isConductorInOrganization) {
-                return errorResponse(res, 409, "Conductor RFID number already exists in the organization");
+                return successResponse(res, 200, "Conductor registered in organization successfully");
             }
+        } else {
+            const hashedPassword = await hashPassword(mobile_number);
 
-            organization.conductor.push(conductorExistid._id);
-            const savedOrganization = await organization.save();
+            const registerConductor = await new Conductor({
+                id_card_no: id_card_no,
+                name: name,
+                password: hashedPassword,
+                mobile_number: mobile_number,
+                email_id: email_id,
+                aadhaar_no: aadhaar_no
+            }).save();
 
-            if (savedOrganization) {
-                return successResponse(res, 200, "Conductor registered to organization successfully", savedOrganization);
-            } else {
-                return errorResponse(res, 500, "Error while registering an existing conductor");
-            }
-        }
-        else if (conductorExistMobile) {
-            const isConductorInOrganization = organization.conductor.includes(conductorExistMobile._id);
-            if (isConductorInOrganization) {
-                return errorResponse(res, 409, "Conductor mobile number already exists in the organization");
-            }
-
-            organization.conductor.push(conductorExistMobile._id);
-            const savedOrganization = await organization.save();
-
-            if (savedOrganization) {
-                return successResponse(res, 200, "Conductor registered to organization successfully", savedOrganization);
-            } else {
-                return errorResponse(res, 500, "Error while registering an existing conductor");
-            }
-        } else if (conductorExistEmail) {
-            const isConductorInOrganization = organization.conductor.includes(conductorExistEmail._id);
-            if (isConductorInOrganization) {
-                return errorResponse(res, 409, "Conductor email already exists in the organization");
-            }
-
-            organization.conductor.push(conductorExistEmail._id);
-            const savedOrganization = await organization.save();
-
-            if (savedOrganization) {
-                return successResponse(res, 200, "Conductor registered to organization successfully", savedOrganization);
-            } else {
-                return errorResponse(res, 500, "Error while registering an existing conductor");
-            }
-        }
-        else {
-            const registerConductor = await new Conductor({ id_card_no, name, mobile_number, email_id, aadhaar_no }).save();
+            const { password, ...conductorWithoutPassword } = registerConductor;
 
             organization.conductor.push(registerConductor._id);
-            const savedOrganization = await organization.save();
+            await organization.save();
 
-            if (savedOrganization) return successResponse(res, 200, "Conductor registered successfully", savedOrganization);
-            else return errorResponse(res, 500, "Error while new conductor registration")
+            return successResponse(res, 200, "Conductor registered in organization successfully", { registerConductor: conductorWithoutPassword });
+
         }
-
     } catch (error) {
         console.log(error)
         return errorResponse(res, 500, "Error while conductor registration", error);
@@ -116,4 +78,4 @@ const GET_OrganizationConductors = async (req, res) => {
 
 
 
-module.exports = { registerConductor, GET_OrganizationConductors };
+module.exports = { POST_RegisterConductor, GET_OrganizationConductors };

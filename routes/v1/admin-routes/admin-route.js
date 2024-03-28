@@ -6,7 +6,7 @@ const { createOrganization, getOrganizations } = require("../../../controllers/o
 const authMiddleware = require("../../../middlewares/auth-middleware");
 
 const { registerPassenger, getAllOrganizationPassengers } = require("../../../controllers/admin/ad-passenger-controller");
-const { registerConductor, GET_OrganizationConductors } = require("../../../controllers/admin/ad-conductor-controller");
+const { POST_RegisterConductor, GET_OrganizationConductors } = require("../../../controllers/admin/ad-conductor-controller");
 const { POST_RegisterBus, GET_OrganizationBuses } = require("../../../controllers/admin/ad-bus-controller");
 const { POST_RegisterBusRoute, GET_BusRoutes, DELETE_BusRoute, GET_RouteDetails, POST_RegisterSegmentTickets } = require("../../../controllers/admin/ad-bus-route-controller");
 const { checkRegisterBusInfo } = require("../../../middlewares/admin-dashboard/bus-middleware");
@@ -30,7 +30,7 @@ adminRouter.post("/register-passenger/:organizationId", authMiddleware, checkReg
 adminRouter.get("/get-oranization-all-passenger-details/:organizationId", authMiddleware, getAllOrganizationPassengers)
 
 /* Manage Conductors */
-adminRouter.post("/register-conductor/:organizationId", authMiddleware, registerConductor)
+adminRouter.post("/register-conductor/:organizationId", authMiddleware, POST_RegisterConductor)
 adminRouter.get("/get-oranization-all-conductor-details/:organizationId", authMiddleware, GET_OrganizationConductors)
 
 /* Manage Buses */

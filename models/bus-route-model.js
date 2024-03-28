@@ -21,6 +21,10 @@ const busRouteSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    reverse_route_name: {
+        type: String,
+        required: true,
+    },
     source: {
         type: String,
         required: true,

@@ -16,8 +16,12 @@ const POST_RegisterBusRoute = async (req, res) => {
         if (!stops_count) return errorResponse(res, 404, "Stops count is required");
         if (!stops) return errorResponse(res, 404, "Stops is required");
 
+        let separatedRoute = route_name.split("-");
+        let reverseRouteName = separatedRoute.reverse().join("-");
+
         const registerBusRoute = await new BusRoute({
             route_number: route_number,
+            reverse_route_name: reverseRouteName,
             route_name: route_name,
             source: stops[0],
             destination: stops[stops.length - 1],
@@ -73,7 +77,8 @@ const DELETE_BusRoute = async (req, res) => {
 
         await Organization.findOneAndUpdate(
             { _id: organizationId },
-            { $pull: { busroutes: routeId } }
+            { $pull: { busroutes: routeId } },
+            { new: true }
         );
 
         await BusRoute.findByIdAndDelete(routeId);
