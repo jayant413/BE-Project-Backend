@@ -7,6 +7,7 @@ const apiRouter = require("./routes")
 const bodyParser = require("body-parser")
 const path = require("path")
 const session = require("express-session")
+const { RfidCardEntry } = require("./controllers/rfid-card-entry-controller")
 
 
 dotenv.config();
@@ -20,7 +21,7 @@ app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "public")));
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'https://ecopass-admin.vercel.app', 'http://192.168.132.107:3000', 'http://192.168.132.107:3001'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:8080', 'https://ecopass-admin.vercel.app', 'http://192.168.132.107:3000', 'http://192.168.132.107:3001'];
 
 app.use(cors({
     credentials: true,
@@ -49,6 +50,10 @@ app.get('/', function (req, res) {
 app.get('*', function (req, res) {
     res.send("<h1> Welcome to ecopass boarding System</h1>")
 })
+
+
+
+
 
 
 app.listen(process.env.PORT, () => {

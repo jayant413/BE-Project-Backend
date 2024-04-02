@@ -7,7 +7,6 @@ const Bus = require('../../models/bus-model');
 
 const POST_ConductorLogin = async (req, res) => {
     const { email_id, password } = req.body;
-    console.log(req.body);
 
     try {
         const conductor = await Conductor.findOne({ email_id: email_id });
@@ -48,4 +47,13 @@ const GET_ConductorAssignedBus = async (req, res) => {
 
 };
 
-module.exports = { POST_ConductorLogin, GET_ConductorAssignedBus }
+const GET_ConductorLogout = (req, res) => {
+    try {
+        res.clearCookie("ecopass_conductor_token");
+        return successResponse(res, 200, "Logged out successfully")
+    } catch (error) {
+        return errorResponse(res, 500, "Error while logging out conductor", error);
+    }
+}
+
+module.exports = { POST_ConductorLogin, GET_ConductorAssignedBus, GET_ConductorLogout }

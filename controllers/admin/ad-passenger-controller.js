@@ -1,3 +1,4 @@
+const { hashPassword } = require("../../helper/password-helper");
 const { errorResponse, successResponse } = require("../../helper/response-format");
 const Organization = require("../../models/organization-modal");
 const Passenger = require("../../models/passanger-info-model");
@@ -72,7 +73,8 @@ const registerPassenger = async (req, res) => {
             }
         }
         else {
-            const registerPassenger = await new Passenger({ rfid_no, name, mobile_number, email_id, aadhaar_no, age, balance }).save();
+            const hashedPassword = await hashPassword(mobile_number);
+            const registerPassenger = await new Passenger({ rfid_no, name, mobile_number, email_id, aadhaar_no, age, balance, password: hashedPassword }).save();
 
             organization.passengers.push(registerPassenger._id);
             const savedOrganization = await organization.save();

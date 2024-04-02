@@ -15,6 +15,10 @@ const PassengerSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    password: {
+        type: String,
+        required: true
+    },
     email_id: {
         type: String,
         required: true,
@@ -32,6 +36,9 @@ const PassengerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    transactionIds: [{
+        type: String
+    }]
     // passengerLogs: [
     //     {
     //         type: mongoose.Schema.Types.ObjectId,
