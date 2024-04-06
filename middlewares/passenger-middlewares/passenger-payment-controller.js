@@ -12,13 +12,17 @@ const MERCHANT_ID = "PGTESTPAYUAT";
 const PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox";
 const SALT_INDEX = 1;
 const SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
-const APP_BE_URL = "http://localhost:3000";
 
 
 const POST_PassengerPayment = async (req, res) => {
-    const { amount } = req.body;
+    const { amount, baseUrl } = req.body;
     const { ecopass_passenger_token } = req.cookies;
     const decodedToken = JWT.verify(ecopass_passenger_token, process.env.JWT_SECRET);
+
+    console.log(baseUrl);
+
+    const APP_FE_URL = baseUrl;
+
 
     try {
         let userId = "MUID123";
@@ -29,7 +33,7 @@ const POST_PassengerPayment = async (req, res) => {
             merchantTransactionId: merchantTransactionId,
             merchantUserId: userId,
             amount: amount * 100, // converting to paise
-            redirectUrl: `${APP_BE_URL}/${decodedToken._id}/payment/validate/${merchantTransactionId}`,
+            redirectUrl: `${APP_FE_URL}/${decodedToken._id}/payment/validate/${merchantTransactionId}`,
             redirectMode: "REDIRECT",
             mobileNumber: "9999999999",
             paymentInstrument: {

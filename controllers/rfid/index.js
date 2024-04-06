@@ -12,8 +12,6 @@ const POST_InsertRfidCardEntry = async (req, res) => {
         const { rfid } = req.body;
 
         const rfidCard = await RfidCard.findOne({ rfid: rfid });
-        // if (!rfidCard) return errorResponse(res, 404, "Rfid card Not Found");
-
 
         const busDetails = await Bus.findById('66059a56f0ad19a3a53360df');
         if (!busDetails) return errorResponse(res, 404, "Bus Not Found");
@@ -37,9 +35,8 @@ const POST_InsertRfidCardEntry = async (req, res) => {
             await new RfidCard({
                 rfid: rfid,
                 entries: [{
-                    place: entryPlace,
                     entryAt: currentTime,
-                    status: "in"
+                    status: "test"
                 }]
             }).save();
             return successResponse(res, 200, "Rfid card registered successfully.")

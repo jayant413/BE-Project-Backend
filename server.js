@@ -6,8 +6,6 @@ const dotenv = require("dotenv")
 const apiRouter = require("./routes")
 const bodyParser = require("body-parser")
 const path = require("path")
-const session = require("express-session")
-const { RfidCardEntry } = require("./controllers/rfid-card-entry-controller")
 
 
 dotenv.config();
