@@ -50,7 +50,10 @@ const loginAdmin = async (req, res) => {
 
         const token = JWT.sign({ _id: admin._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        res.cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000, path: "/", httpOnly: true, secure: true })
+        res.cookie("token", token, {
+            maxAge: 7 * 24 * 60 * 60 * 1000, path: "/", httpOnly: true,
+            //  secure: true
+        })
 
         return successResponse(res, 200, "Logged in successfully", { token: token })
 

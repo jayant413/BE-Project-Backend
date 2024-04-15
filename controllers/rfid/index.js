@@ -1,4 +1,5 @@
 const { errorResponse, successResponse } = require("../../helper/response-format");
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const RfidCard = require("../../models/rfid-model");
 const Bus = require("../../models/bus-model");
@@ -12,9 +13,9 @@ const POST_InsertRfidCardEntry = async (req, res) => {
         const { rfid } = req.body;
 
         const rfidCard = await RfidCard.findOne({ rfid: rfid });
-
         const busDetails = await Bus.findById('66059a56f0ad19a3a53360df');
-        if (!busDetails) return errorResponse(res, 404, "Bus Not Found");
+        const passengerDetails = await Passenger.findOne({ rfid_no: rfid });
+        const busRouteDetails = await BusRoute.findById(busDetails.busRouteID);
 
         const findEntryPlace = () => {
             for (let i = 0; i < busDetails.journey[0].length; i++) {
@@ -27,7 +28,6 @@ const POST_InsertRfidCardEntry = async (req, res) => {
             }
         }
 
-
         let currentTime = Date.now();
         let entryPlace = await findEntryPlace();
 
@@ -35,25 +35,26 @@ const POST_InsertRfidCardEntry = async (req, res) => {
             await new RfidCard({
                 rfid: rfid,
                 entries: [{
+                    place: "First entry",
                     entryAt: currentTime,
-                    status: "test"
+                    status: "scanned"
                 }]
             }).save();
             return successResponse(res, 200, "Rfid card registered successfully.")
         }
 
+        if (busDetails.journeyStatus == "off") {
+            rfidCard.entries.unshift({
+                place: "Journey not started",
+                status: "scanned",
+                entryAt: `${currentTime}`,
+                balance: passengerDetails.balance
+            })
+            await rfidCard.save();
+            return successResponse(res, 200, "Rfid card scanned journey not started yet")
+        };
+
         let previousEntry = rfidCard.entries[0];
-
-
-        const passengerDetails = await Passenger.findOne({ rfid_no: rfid });
-        if (!passengerDetails) return errorResponse(res, 404, "Passenger Not Found");
-
-
-
-        const busRouteDetails = await BusRoute.findById(busDetails.busRouteID);
-        if (!busRouteDetails) return errorResponse(res, 404, "Bus Route Not Found");
-
-
 
         const findTicketPrice = (travelSegment) => {
 
@@ -77,11 +78,14 @@ const POST_InsertRfidCardEntry = async (req, res) => {
         }
 
 
-        if (previousEntry.place === entryPlace) return successResponse(res, 200, "No amount deducted");
-
+        // if (previousEntry.place === entryPlace) return successResponse(res, 200, "No amount deducted");
 
 
         if (previousEntry.status == 'in') {
+
+            const passengerInBus = busDetails.passengersInBus.find(pass => pass.passengerID.equals(new ObjectId(passengerDetails._id)));
+            passengerInBus.outTime = `${currentTime}`;
+            passengerInBus.outPlace = entryPlace;
 
             let travelSegment = `${previousEntry.place}-${entryPlace}`;
             let ticket = await findTicketPrice(travelSegment);
@@ -91,26 +95,35 @@ const POST_InsertRfidCardEntry = async (req, res) => {
             rfidCard.entries.unshift({
                 place: entryPlace,
                 status: "out",
-                entryAt: `${currentTime}`
+                entryAt: `${currentTime}`,
+                ticketPrice: ticket,
+                balance: passengerDetails.balance
             })
         } else {
+            busDetails.passengersInBus.push({
+                passengerID: passengerDetails._id,
+                rfidCard: rfid,
+                inTime: `${currentTime}`,
+                inPlace: entryPlace
+            })
             rfidCard.entries.unshift({
                 place: entryPlace,
                 status: "in",
-                entryAt: `${currentTime}`
-
+                entryAt: `${currentTime}`,
+                balance: passengerDetails.balance
             })
         }
 
         if (!passengerDetails.balance <= 0) {
             await passengerDetails.save();
             await rfidCard.save();
+            await busDetails.save();
         } else {
             //  TODO:  handle zero balance
             console.log("Balance is zero")
         }
 
-        return successResponse(res, 200, "Successfully inserted rfid card entry");
+        return successResponse(res, 200, `Successfully journey ${previousEntry.status == "in" ? "exited at" : "started from"} ${entryPlace}`);
     } catch (error) {
         console.log(error)
         return errorResponse(res, 500, "Error inserting rfid card entry")

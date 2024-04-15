@@ -3,6 +3,8 @@ const JWT = require('jsonwebtoken');
 const Bus = require("../../models/bus-model");
 const BusRoute = require("../../models/bus-route-model");
 const Conductor = require("../../models/conductor-info-model");
+const RfidCard = require("../../models/rfid-model");
+const axios = require("axios");
 
 const POST_StartJourney = async (req, res) => {
     try {
@@ -39,8 +41,15 @@ const POST_StartJourney = async (req, res) => {
             createdAt: currentTime
         }];
 
-        bus.journey.unshift(newJourney);
+        const passengersWithoutOutTime = bus.passengersInBus.filter(passenger => !passenger.outTime);
 
+        await Promise.all(passengersWithoutOutTime.map(async (passenger) => {
+            await axios.post("http://localhost:8000/api/v1/rfid/insert", { rfid: passenger.rfidCard });
+        }));
+
+        bus.journey.unshift(newJourney);
+        bus.journeyStatus = "on";
+        bus.passengersInBus = [];
         await bus.save();
 
         return successResponse(res, 200, "Started journey successfully", { busdetails: bus });
@@ -84,16 +93,30 @@ const GET_CheckNextStop = async (req, res) => {
 
         if (source == busRoute.source) {
             toCheckStop = busRoute.all_stops[journeyDone];
-
         } else if (source == busRoute.destination) {
             toCheckStop = busRoute.all_stops[busRoute.all_stops.length - (journeyDone + 1)];
-        }
+        };
+
         bus.journey[0].push({
             stop: toCheckStop,
             createdAt: currentTime
         });
 
         await bus.save();
+
+
+        if (bus.journey[0].length == busRoute.all_stops.length) {
+            const passengersWithoutOutTime = bus.passengersInBus.filter(passenger => !passenger.outTime);
+
+            await Promise.all(passengersWithoutOutTime.map(async (passenger) => {
+                await axios.post("http://localhost:8000/api/v1/rfid/insert", { rfid: passenger.rfidCard });
+            }));
+
+            bus.journeyStatus = "off";
+            bus.passengersInBus = [];
+            await bus.save();
+        };
+
 
         return successResponse(res, 200, "Checked next stop")
     } catch (error) {

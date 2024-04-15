@@ -9,7 +9,13 @@ const entrySchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['in', 'out', 'test'],
+        enum: ['in', 'out', 'scanned'],
+    },
+    ticketPrice: {
+        type: Number
+    },
+    balance: {
+        type: Number
     }
 })
 

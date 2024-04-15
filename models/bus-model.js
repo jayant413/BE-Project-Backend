@@ -11,8 +11,25 @@ const journeySchema = new mongoose.Schema({
     }
 })
 
+const passengersInBusSchema = new mongoose.Schema({
+    passengerID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Passenger',
+    },
+    rfidCard: String,
+    inTime: String,
+    inPlace: String,
+    outTime: String,
+    outPlace: String
+})
+
 
 const busSchema = new mongoose.Schema({
+    busNumber: {
+        type: String,
+        unique: true,
+        required: true,
+    },
     busRouteID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'BusRoute',
@@ -20,11 +37,6 @@ const busSchema = new mongoose.Schema({
     conductorID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Conductor',
-    },
-    busNumber: {
-        type: String,
-        unique: true,
-        required: true,
     },
     conductorName: {
         type: String,
@@ -38,6 +50,12 @@ const busSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    journeyStatus: {
+        type: String,
+        enum: ["on", "off"],
+        default: "off"
+    },
+    passengersInBus: [passengersInBusSchema],
     journey: [
         [journeySchema]
     ]
